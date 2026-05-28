@@ -1,0 +1,182 @@
+[
+  {
+    "name": "Hubbard House",
+    "address": "1710 Hubbard St, Detroit, MI",
+    "notes": "Starter pilot building. Confirm access, Wi-Fi, Thermostat location, and Sensor plan on site.",
+    "setupStatus": "in_progress",
+    "wifiStatus": "needs_wifi",
+    "thermostatInstallStatus": "needs_install",
+    "sensorInstallStatus": "needs_sensor_setup"
+  },
+  {
+    "name": "Mabor Apartments",
+    "address": "811 Mabor Ave, Detroit, MI",
+    "notes": "Starter pilot building. Needs Wi-Fi confirmation and device mapping.",
+    "setupStatus": "in_progress",
+    "wifiStatus": "needs_wifi",
+    "thermostatInstallStatus": "needs_install",
+    "sensorInstallStatus": "needs_sensor_setup"
+  },
+  {
+    "name": "Woodward Lofts",
+    "address": "1448 Woodward Ave, Detroit, MI",
+    "notes": "Demo-ready building with mixed-use layout and slower upper-floor heat recovery.",
+    "setupStatus": "complete",
+    "wifiStatus": "complete",
+    "thermostatInstallStatus": "complete",
+    "sensorInstallStatus": "complete"
+  },
+  {
+    "name": "Cass Corridor House",
+    "address": "4620 Cass Ave, Detroit, MI",
+    "notes": "Preload placeholder. Verify address, floors, units, Wi-Fi, and ecobee mapping.",
+    "setupStatus": "needs_install",
+    "wifiStatus": "needs_wifi",
+    "thermostatInstallStatus": "needs_install",
+    "sensorInstallStatus": "needs_sensor_setup"
+  },
+  {
+    "name": "Brush Park Flats",
+    "address": "2701 Brush St, Detroit, MI",
+    "notes": "Preload placeholder for field scheduling.",
+    "setupStatus": "needs_install",
+    "wifiStatus": "needs_wifi",
+    "thermostatInstallStatus": "needs_install",
+    "sensorInstallStatus": "needs_sensor_setup"
+  },
+  {
+    "name": "Corktown Residence",
+    "address": "1635 Michigan Ave, Detroit, MI",
+    "notes": "Preload placeholder for on-site mapping.",
+    "setupStatus": "needs_install",
+    "wifiStatus": "needs_wifi",
+    "thermostatInstallStatus": "needs_install",
+    "sensorInstallStatus": "needs_sensor_setup"
+  },
+  {
+    "name": "Rivertown Commons",
+    "address": "735 Atwater St, Detroit, MI",
+    "notes": "Preload placeholder. Confirm mechanical room access.",
+    "setupStatus": "needs_install",
+    "wifiStatus": "needs_wifi",
+    "thermostatInstallStatus": "needs_install",
+    "sensorInstallStatus": "needs_sensor_setup"
+  },
+  {
+    "name": "New Center Court",
+    "address": "3031 W Grand Blvd, Detroit, MI",
+    "notes": "Preload placeholder for future building rollout.",
+    "setupStatus": "needs_install",
+    "wifiStatus": "needs_wifi",
+    "thermostatInstallStatus": "needs_install",
+    "sensorInstallStatus": "needs_sensor_setup"
+  },
+  {
+    "name": "Eastern Market House",
+    "address": "1400 Gratiot Ave, Detroit, MI",
+    "notes": "Preload placeholder. Validate floors and sensor count.",
+    "setupStatus": "needs_install",
+    "wifiStatus": "needs_wifi",
+    "thermostatInstallStatus": "needs_install",
+    "sensorInstallStatus": "needs_sensor_setup"
+  },
+  {
+    "name": "Midtown North",
+    "address": "71 E Forest Ave, Detroit, MI",
+    "notes": "Preload placeholder for field install tracking.",
+    "setupStatus": "needs_install",
+    "wifiStatus": "needs_wifi",
+    "thermostatInstallStatus": "needs_install",
+    "sensorInstallStatus": "needs_sensor_setup"
+  },
+  {
+    "name": "Lafayette Park House",
+    "address": "1300 Lafayette St, Detroit, MI",
+    "notes": "Preload placeholder. Confirm unit labels.",
+    "setupStatus": "needs_install",
+    "wifiStatus": "needs_wifi",
+    "thermostatInstallStatus": "needs_install",
+    "sensorInstallStatus": "needs_sensor_setup"
+  },
+  {
+    "name": "Palmer Park Residence",
+    "address": "19600 Woodward Ave, Detroit, MI",
+    "notes": "Preload placeholder. Confirm Wi-Fi readiness.",
+    "setupStatus": "needs_install",
+    "wifiStatus": "needs_wifi",
+    "thermostatInstallStatus": "needs_install",
+    "sensorInstallStatus": "needs_sensor_setup"
+  },
+  {
+    "name": "Bagley House",
+    "address": "18900 Livernois Ave, Detroit, MI",
+    "notes": "Preload placeholder for future building onboarding.",
+    "setupStatus": "needs_install",
+    "wifiStatus": "needs_wifi",
+    "thermostatInstallStatus": "needs_install",
+    "sensorInstallStatus": "needs_sensor_setup"
+  },
+  {
+    "name": "West Village Flats",
+    "address": "8044 Kercheval Ave, Detroit, MI",
+    "notes": "Preload placeholder. Verify Sensor layout.",
+    "setupStatus": "needs_install",
+    "wifiStatus": "needs_wifi",
+    "thermostatInstallStatus": "needs_install",
+    "sensorInstallStatus": "needs_sensor_setup"
+  },
+  {
+    "name": "Boston Edison House",
+    "address": "880 W Boston Blvd, Detroit, MI",
+    "notes": "Preload placeholder. Confirm Thermostat placement.",
+    "setupStatus": "needs_install",
+    "wifiStatus": "needs_wifi",
+    "thermostatInstallStatus": "needs_install",
+    "sensorInstallStatus": "needs_sensor_setup"
+  },
+  {
+    "name": "Grand River Residence",
+    "address": "4730 Grand River Ave, Detroit, MI",
+    "notes": "Preload placeholder for installation sequence.",
+    "setupStatus": "needs_install",
+    "wifiStatus": "needs_wifi",
+    "thermostatInstallStatus": "needs_install",
+    "sensorInstallStatus": "needs_sensor_setup"
+  },
+  {
+    "name": "Jefferson East House",
+    "address": "14720 E Jefferson Ave, Detroit, MI",
+    "notes": "Preload placeholder. Confirm ecobee account mapping.",
+    "setupStatus": "needs_install",
+    "wifiStatus": "needs_wifi",
+    "thermostatInstallStatus": "needs_install",
+    "sensorInstallStatus": "needs_sensor_setup"
+  },
+  {
+    "name": "Marygrove House",
+    "address": "8425 W McNichols Rd, Detroit, MI",
+    "notes": "Preload placeholder for field setup.",
+    "setupStatus": "needs_install",
+    "wifiStatus": "needs_wifi",
+    "thermostatInstallStatus": "needs_install",
+    "sensorInstallStatus": "needs_sensor_setup"
+  },
+  {
+    "name": "Russell Industrial Flats",
+    "address": "1600 Clay St, Detroit, MI",
+    "notes": "Preload placeholder. Confirm heating zone assumptions.",
+    "setupStatus": "needs_install",
+    "wifiStatus": "needs_wifi",
+    "thermostatInstallStatus": "needs_install",
+    "sensorInstallStatus": "needs_sensor_setup"
+  },
+  {
+    "name": "Trumbull House",
+    "address": "2121 Trumbull Ave, Detroit, MI",
+    "notes": "Preload placeholder. Confirm floor and unit structure.",
+    "setupStatus": "needs_install",
+    "wifiStatus": "needs_wifi",
+    "thermostatInstallStatus": "needs_install",
+    "sensorInstallStatus": "needs_sensor_setup"
+  }
+]

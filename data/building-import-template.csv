@@ -1,0 +1,4 @@
+name,address,notes,setupStatus,wifiStatus,thermostatInstallStatus,sensorInstallStatus
+Hubbard House,"1710 Hubbard St, Detroit, MI","Starter pilot building. Confirm access, Wi-Fi, Thermostat location, and Sensor plan on site.",in_progress,needs_wifi,needs_install,needs_sensor_setup
+Mabor Apartments,"811 Mabor Ave, Detroit, MI","Starter pilot building. Needs Wi-Fi confirmation and device mapping.",in_progress,needs_wifi,needs_install,needs_sensor_setup
+Woodward Lofts,"1448 Woodward Ave, Detroit, MI","Demo-ready building with mixed-use layout and slower upper-floor heat recovery.",complete,complete,complete,complete
