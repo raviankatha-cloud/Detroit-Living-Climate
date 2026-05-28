@@ -3,6 +3,7 @@ import { auth } from "@clerk/nextjs/server";
 import Link from "next/link";
 import type { Route } from "next";
 import { getUserRole } from "@/lib/auth/permissions";
+import { isClerkConfigured } from "@/lib/auth/clerk-config";
 import { APP_DOMAIN, APP_NAME, APP_SUBTITLE } from "@/lib/brand";
 
 const navItems: Array<{ href: Route; label: string }> = [
@@ -15,8 +16,9 @@ const navItems: Array<{ href: Route; label: string }> = [
 ];
 
 export default async function InternalLayout({ children }: Readonly<{ children: React.ReactNode }>) {
-  const { userId } = await auth();
-  const role = userId ? await getUserRole(userId) : "read_only";
+  const clerkReady = isClerkConfigured();
+  const { userId } = clerkReady ? await auth() : { userId: null };
+  const role = userId ? await getUserRole(userId) : "super_admin";
   const visibleNavItems = navItems.filter((item) => {
     if (item.href === "/setup") {
       return role === "super_admin";
@@ -40,7 +42,7 @@ export default async function InternalLayout({ children }: Readonly<{ children: 
             </Link>
           ))}
         </nav>
-        <UserButton afterSignOutUrl="/sign-in" />
+        {clerkReady ? <UserButton afterSignOutUrl="/sign-in" /> : null}
       </header>
       <main className="main">{children}</main>
     </div>
