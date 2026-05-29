@@ -1,6 +1,6 @@
 "use client";
 
-export default function ErrorPage({ reset }: { reset: () => void }) {
+export default function ErrorPage({ error, reset }: { error: Error & { digest?: string }; reset: () => void }) {
   return (
     <section className="hero-panel compact-hero">
       <div>
