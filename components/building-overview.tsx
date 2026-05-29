@@ -1,5 +1,6 @@
 "use client";
 
+import type React from "react";
 import { useMemo, useState, type MouseEvent } from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
@@ -70,8 +71,8 @@ export function BuildingOverview({ buildings, canSetup = false }: Props) {
         />
       ) : (
         <div className="building-list">
-          {filteredBuildings.map((building) => (
-            <BuildingPreview building={building} key={building.id} />
+          {filteredBuildings.map((building, index) => (
+            <BuildingPreview building={building} key={building.id} index={index} />
           ))}
         </div>
       )}
@@ -79,7 +80,7 @@ export function BuildingOverview({ buildings, canSetup = false }: Props) {
   );
 }
 
-function BuildingPreview({ building }: { building: BuildingSummary }) {
+function BuildingPreview({ building, index = 0 }: { building: BuildingSummary; index?: number }) {
   const router = useRouter();
   const summary = getBuildingStatusSummary(building);
   const attention = building.status === "offline" || building.differential >= 2 || needsSetup(building);
@@ -96,7 +97,11 @@ function BuildingPreview({ building }: { building: BuildingSummary }) {
   }
 
   return (
-    <article className={`building-card ${attention ? "needs-attention" : ""}`} onClick={openBuilding}>
+    <article
+      className={`building-card ${attention ? "needs-attention" : ""}`}
+      onClick={openBuilding}
+      style={{ "--card-index": index } as React.CSSProperties}
+    >
       <div className="building-card-main">
         <div className="card-topline">
           <span className="status-badge">

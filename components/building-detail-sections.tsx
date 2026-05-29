@@ -8,7 +8,7 @@ export function BuildingDetailHero({ building, canEdit }: { building: BuildingDe
   const summary = getBuildingStatusSummary(building);
 
   return (
-    <section className="building-hero detail-hero">
+    <section className={`building-hero detail-hero status-${building.status}`}>
       <div className="building-title">
         <span className="eyebrow">Building operations</span>
         <h2>{building.name}</h2>
@@ -132,16 +132,16 @@ export function DifferentialSummaryPanel({ building }: { building: BuildingDetai
           {belowTarget ? "Below target" : "On target"}
         </span>
       </div>
-      <div className="differential-readout">
-        <div>
+      <div className="therm-readout">
+        <div className="therm-readout-cell">
           <span>Setpoint</span>
-          <strong>{building.currentSetpoint.toFixed(1)}F</strong>
+          <strong className="temp-glow">{building.currentSetpoint.toFixed(1)}°F</strong>
         </div>
-        <div>
+        <div className="therm-readout-cell">
           <span>Current Reading</span>
-          <strong>{building.thermostatTemperature.toFixed(1)}F</strong>
+          <strong>{building.thermostatTemperature.toFixed(1)}°F</strong>
         </div>
-        <div className={isProblem ? "danger-readout" : ""}>
+        <div className={`therm-readout-cell ${isProblem ? "danger-readout" : ""}`}>
           <span>Differential</span>
           <strong>{formatDifferentialLabel(building.differential)}</strong>
         </div>

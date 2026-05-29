@@ -95,9 +95,14 @@ export function EcobeeIntegrationPanel({ status }: { status: EcobeeIntegrationSt
               : "Server-side account authorization, token storage, refresh, and portfolio sync readiness."}
           </p>
         </div>
-        <span className={`status-badge ${status.accountConnected ? "success" : "warning"}`}>
-          {status.accountConnected ? "Account connected" : "Not connected"}
-        </span>
+        <div style={{ display: "flex", alignItems: "center", gap: 10 }}>
+          <span className={`connection-ring ${status.accountConnected ? "connected" : ""}`}>
+            <span className={`dot ${status.accountConnected ? "online" : "offline"}`} />
+          </span>
+          <span className={`status-badge ${status.accountConnected ? "success" : "warning"}`}>
+            {status.accountConnected ? "Account connected" : "Not connected"}
+          </span>
+        </div>
       </div>
 
       <div className="integration-grid">

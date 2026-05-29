@@ -32,13 +32,26 @@ body {
 body {
   margin: 0;
   background:
+    linear-gradient(rgba(255,255,255,0.018) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(255,255,255,0.018) 1px, transparent 1px),
     linear-gradient(135deg, rgba(125, 220, 255, 0.045), transparent 30%),
     linear-gradient(180deg, #0b0b0d 0%, #050506 46%, #030304 100%),
     var(--bg);
+  background-size: 80px 80px, 80px 80px, auto, auto, auto;
+  background-attachment: fixed, fixed, fixed, fixed, fixed;
   color: var(--text);
   font-family:
     Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
 }
+
+/* Custom scrollbar */
+::-webkit-scrollbar { width: 6px; height: 6px; }
+::-webkit-scrollbar-track { background: transparent; }
+::-webkit-scrollbar-thumb { background: rgba(125, 220, 255, 0.22); border-radius: 99px; }
+::-webkit-scrollbar-thumb:hover { background: rgba(125, 220, 255, 0.4); }
+
+/* Tabular numbers for temperature displays */
+.tabular { font-variant-numeric: tabular-nums; }
 
 a {
   color: inherit;
@@ -61,15 +74,16 @@ textarea {
   top: 0;
   z-index: 10;
   display: grid;
-  grid-template-columns: minmax(320px, 1fr) auto auto;
+  grid-template-columns: minmax(280px, 1fr) auto auto;
   align-items: center;
-  gap: 28px;
-  padding: 18px clamp(18px, 4vw, 48px);
+  gap: 24px;
+  padding: 14px clamp(18px, 4vw, 48px);
   border-bottom: 1px solid var(--line);
   background:
     linear-gradient(90deg, rgba(125, 220, 255, 0.055), transparent 28%, rgba(197, 164, 103, 0.045)),
-    rgba(5, 5, 6, 0.9);
-  backdrop-filter: blur(20px);
+    rgba(5, 5, 6, 0.92);
+  backdrop-filter: blur(24px);
+  -webkit-backdrop-filter: blur(24px);
 }
 
 .brand {
@@ -736,11 +750,13 @@ textarea {
 .dot.online {
   color: var(--green);
   background: var(--green);
+  animation: pulse-online 2s ease-in-out infinite;
 }
 
 .dot.offline {
   color: var(--red);
   background: var(--red);
+  animation: pulse-offline 2.4s ease-in-out infinite;
 }
 
 .detail-grid {
@@ -1262,6 +1278,12 @@ textarea {
   transform: translateY(-1px);
 }
 
+.button:active {
+  transform: scale(0.96) translateY(0);
+  box-shadow: none;
+  transition-duration: 60ms;
+}
+
 .button.primary {
   background: linear-gradient(135deg, #ffffff, #dbefff);
   color: #07090a;
@@ -1671,7 +1693,12 @@ textarea {
 
   .nav-links {
     grid-column: 1 / -1;
+    order: 3;
     justify-content: flex-start;
+  }
+
+  .topbar-right {
+    order: 2;
   }
 
   .directory-toolbar,
@@ -1770,5 +1797,305 @@ textarea {
 
   .alert-side {
     justify-items: start;
+  }
+}
+
+/* ═══════════════════════════════════════════════════════════════
+   PREMIUM ANIMATIONS & EFFECTS
+   ═══════════════════════════════════════════════════════════════ */
+
+/* ── @property declarations (rotating gradient border) ── */
+@property --border-angle {
+  syntax: '<angle>';
+  inherits: false;
+  initial-value: 0deg;
+}
+
+/* ── Keyframes ── */
+@keyframes pulse-online {
+  0%, 100% { box-shadow: 0 0 0 0 rgba(53, 208, 127, 0.55), 0 0 8px rgba(53, 208, 127, 0.3); }
+  50%       { box-shadow: 0 0 0 5px rgba(53, 208, 127, 0),  0 0 16px rgba(53, 208, 127, 0.5); }
+}
+
+@keyframes pulse-offline {
+  0%, 100% { box-shadow: 0 0 0 0 rgba(255, 89, 100, 0.55), 0 0 8px rgba(255, 89, 100, 0.3); }
+  50%       { box-shadow: 0 0 0 5px rgba(255, 89, 100, 0),  0 0 16px rgba(255, 89, 100, 0.5); }
+}
+
+@keyframes border-spin {
+  to { --border-angle: 360deg; }
+}
+
+@keyframes card-enter {
+  from { opacity: 0; transform: translateY(20px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes stat-enter {
+  from { opacity: 0; transform: translateY(12px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes shake {
+  0%, 100% { transform: translateX(0); }
+  15%       { transform: translateX(-4px); }
+  35%       { transform: translateX(4px); }
+  55%       { transform: translateX(-3px); }
+  75%       { transform: translateX(3px); }
+}
+
+@keyframes hero-glow-pulse {
+  0%, 100% { opacity: 0.7; }
+  50%       { opacity: 1; }
+}
+
+@keyframes connection-ring {
+  0%, 100% { box-shadow: 0 0 0 0 rgba(53, 208, 127, 0.5); }
+  50%       { box-shadow: 0 0 0 8px rgba(53, 208, 127, 0); }
+}
+
+/* ── Animated gradient border on hero panels ── */
+.hero-panel,
+.building-hero {
+  position: relative;
+}
+
+.hero-panel::before,
+.building-hero::before {
+  content: '';
+  position: absolute;
+  inset: -1px;
+  border-radius: 15px;
+  background: conic-gradient(
+    from var(--border-angle),
+    rgba(125, 220, 255, 0.55) 0deg,
+    rgba(255, 255, 255, 0.15) 90deg,
+    rgba(197, 164, 103, 0.5) 180deg,
+    rgba(143, 183, 255, 0.4) 270deg,
+    rgba(125, 220, 255, 0.55) 360deg
+  );
+  z-index: -1;
+  animation: border-spin 6s linear infinite;
+  border-radius: 15px;
+}
+
+/* ── Deep radial glow behind dashboard hero title ── */
+.dashboard-hero {
+  overflow: hidden;
+}
+
+.dashboard-hero::after {
+  content: '';
+  position: absolute;
+  top: -60px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 700px;
+  height: 340px;
+  background: radial-gradient(
+    ellipse at center,
+    rgba(125, 220, 255, 0.09) 0%,
+    rgba(143, 183, 255, 0.05) 40%,
+    transparent 70%
+  );
+  pointer-events: none;
+  animation: hero-glow-pulse 4s ease-in-out infinite;
+  z-index: 0;
+}
+
+/* Ensure hero content sits above the glow */
+.dashboard-hero > * {
+  position: relative;
+  z-index: 1;
+}
+
+/* ── Building detail ambient status glow ── */
+.building-hero.status-online {
+  box-shadow: var(--shadow), 0 0 90px rgba(53, 208, 127, 0.07);
+}
+
+.building-hero.status-online::before {
+  background: conic-gradient(
+    from var(--border-angle),
+    rgba(53, 208, 127, 0.5) 0deg,
+    rgba(125, 220, 255, 0.2) 90deg,
+    rgba(53, 208, 127, 0.3) 180deg,
+    rgba(125, 220, 255, 0.15) 270deg,
+    rgba(53, 208, 127, 0.5) 360deg
+  );
+}
+
+.building-hero.status-offline {
+  box-shadow: var(--shadow), 0 0 90px rgba(255, 89, 100, 0.07);
+}
+
+.building-hero.status-offline::before {
+  background: conic-gradient(
+    from var(--border-angle),
+    rgba(255, 89, 100, 0.5) 0deg,
+    rgba(246, 185, 75, 0.2) 90deg,
+    rgba(255, 89, 100, 0.3) 180deg,
+    rgba(246, 185, 75, 0.15) 270deg,
+    rgba(255, 89, 100, 0.5) 360deg
+  );
+}
+
+/* ── Building card entrance animations ── */
+.building-card {
+  animation: card-enter 0.45s cubic-bezier(0.16, 1, 0.3, 1) both;
+  animation-delay: calc(var(--card-index, 0) * 60ms);
+}
+
+/* ── Stat card entrance animations ── */
+.stat-card {
+  animation: stat-enter 0.4s cubic-bezier(0.16, 1, 0.3, 1) both;
+  animation-delay: calc(var(--stat-index, 0) * 55ms);
+}
+
+/* ── Alert badge shake ── */
+.alert-badge.new-alert {
+  animation: shake 0.5s ease 0.2s;
+}
+
+/* ── Premium live clock in topbar ── */
+.live-clock {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 1px;
+  min-width: 92px;
+}
+
+.live-clock-time {
+  font-size: 16px;
+  font-weight: 700;
+  font-variant-numeric: tabular-nums;
+  color: var(--text);
+  letter-spacing: -0.01em;
+  line-height: 1;
+}
+
+.live-clock-date {
+  font-size: 10px;
+  font-weight: 600;
+  color: var(--muted);
+  letter-spacing: 0.03em;
+  text-transform: uppercase;
+}
+
+/* ── Premium thermostat digital readout ── */
+.therm-readout {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 10px;
+  padding: 18px;
+  background:
+    linear-gradient(135deg, rgba(125, 220, 255, 0.04), rgba(0,0,0,0)),
+    rgba(0,0,0,0.28);
+  border-top: 1px solid var(--line);
+}
+
+.therm-readout-cell {
+  padding: 16px;
+  border: 1px solid var(--line);
+  border-radius: 14px;
+  background: linear-gradient(180deg, rgba(255,255,255,0.04), rgba(255,255,255,0.01));
+}
+
+.therm-readout-cell span {
+  display: block;
+  color: var(--muted);
+  font-size: 10px;
+  font-weight: 760;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+}
+
+.therm-readout-cell strong {
+  display: block;
+  margin-top: 10px;
+  font-size: clamp(26px, 3.5vw, 40px);
+  font-weight: 700;
+  font-variant-numeric: tabular-nums;
+  letter-spacing: -0.02em;
+  line-height: 1;
+  font-family: ui-monospace, "SF Mono", "Fira Code", "Cascadia Code", monospace;
+}
+
+.therm-readout-cell.danger-readout {
+  border-color: rgba(255, 89, 100, 0.38);
+  background: rgba(255, 89, 100, 0.075);
+}
+
+.therm-readout-cell.danger-readout strong {
+  color: #ffd7db;
+  text-shadow: 0 0 20px rgba(255, 89, 100, 0.4);
+}
+
+.therm-readout-cell strong.temp-glow {
+  text-shadow: 0 0 24px rgba(125, 220, 255, 0.35);
+  color: var(--cyan);
+}
+
+/* ── SmartBuildings animated connection indicator ── */
+.connection-ring {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  border: 2px solid rgba(255,255,255,0.1);
+  flex-shrink: 0;
+}
+
+.connection-ring.connected {
+  border-color: rgba(53, 208, 127, 0.5);
+  animation: connection-ring 2s ease-in-out infinite;
+}
+
+/* ── Count-up stat value ── */
+.stat-value {
+  font-variant-numeric: tabular-nums;
+}
+
+/* ── Enhanced glassmorphism panels ── */
+.section,
+.card,
+.building-card,
+.sensor-card,
+.device-card,
+.alert-card {
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+}
+
+/* ── Topbar clock area ── */
+.topbar-right {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+}
+
+/* ── Mobile improvements ── */
+@media (max-width: 720px) {
+  /* Larger touch targets */
+  .button { min-height: 44px; padding: 0 18px; }
+  .nav-links a { min-height: 44px; padding: 10px 14px; }
+  .open-link { min-height: 44px; }
+
+  /* Bottom nav on mobile */
+  .topbar {
+    padding-bottom: 12px;
+  }
+
+  .building-card {
+    /* Cards span full width, no metrics grid */
+    cursor: pointer;
+  }
+
+  /* Reduce card stagger delay on mobile */
+  .building-card {
+    animation-delay: calc(var(--card-index, 0) * 30ms);
   }
 }

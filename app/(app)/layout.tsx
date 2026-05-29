@@ -4,6 +4,7 @@ import Link from "next/link";
 import type { Route } from "next";
 import { getUserRole } from "@/lib/auth/permissions";
 import { isClerkConfigured } from "@/lib/auth/clerk-config";
+import { LiveClock } from "@/components/live-clock";
 import { APP_DOMAIN, APP_NAME, APP_SUBTITLE } from "@/lib/brand";
 
 const navItems: Array<{ href: Route; label: string }> = [
@@ -42,7 +43,10 @@ export default async function InternalLayout({ children }: Readonly<{ children: 
             </Link>
           ))}
         </nav>
-        {clerkReady ? <UserButton afterSignOutUrl="/sign-in" /> : null}
+        <div className="topbar-right">
+          <LiveClock />
+          {clerkReady ? <UserButton afterSignOutUrl="/sign-in" /> : null}
+        </div>
       </header>
       <main className="main">{children}</main>
     </div>
