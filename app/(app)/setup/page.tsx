@@ -2,12 +2,14 @@ import { BuildingImportForm, SetupWizardForm } from "@/components/admin-forms";
 import { EcobeeIntegrationPanel } from "@/components/ecobee-integration-panel";
 import { auth } from "@clerk/nextjs/server";
 import { getUserRole } from "@/lib/auth/permissions";
+import { isClerkConfigured } from "@/lib/auth/clerk-config";
 import { getAccessibleBuildingDetails } from "@/lib/data/buildings";
 import { getEcobeeIntegrationStatus } from "@/lib/data/ecobee-status";
 
 export default async function SetupPage() {
-  const { userId } = await auth();
-  const role = userId ? await getUserRole(userId) : "read_only";
+  const clerkReady = isClerkConfigured();
+  const { userId } = clerkReady ? await auth() : { userId: null };
+  const role = userId ? await getUserRole(userId) : "super_admin";
   const [buildings, ecobeeStatus] = await Promise.all([
     getAccessibleBuildingDetails(),
     getEcobeeIntegrationStatus()
