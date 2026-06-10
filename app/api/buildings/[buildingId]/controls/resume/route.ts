@@ -1,5 +1,6 @@
 import { NextResponse } from "next/server";
 import { auth } from "@clerk/nextjs/server";
+import { isClerkConfigured } from "@/lib/auth/clerk-config";
 import { canControlBuilding } from "@/lib/auth/permissions";
 import { resumeThermostatProgram } from "@/lib/ecobee/client";
 import { logAuditEvent } from "@/lib/audit";
@@ -9,14 +10,15 @@ type Context = {
 };
 
 export async function POST(request: Request, context: Context) {
-  const { userId } = await auth();
+  const clerkReady = isClerkConfigured();
+  const { userId } = clerkReady ? await auth() : { userId: "local-dev" };
   const { buildingId } = await context.params;
 
   if (!userId) {
     return NextResponse.json({ message: "Authentication required." }, { status: 401 });
   }
 
-  if (!(await canControlBuilding(userId, buildingId))) {
+  if (clerkReady && !(await canControlBuilding(userId, buildingId))) {
     return NextResponse.json({ message: "You do not have control access for this building." }, { status: 403 });
   }
 

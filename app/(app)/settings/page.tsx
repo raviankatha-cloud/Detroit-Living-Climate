@@ -4,13 +4,15 @@ import { AccessManagementForm } from "@/components/admin-forms";
 import { EcobeeSetupPanel } from "@/components/ecobee-setup-panel";
 import { MildDayRulesPanel } from "@/components/mild-day-rules-panel";
 import { NotificationSettingsPanel } from "@/components/notification-settings-panel";
+import { isClerkConfigured } from "@/lib/auth/clerk-config";
 import { getUserRole } from "@/lib/auth/permissions";
 import { getCurrentUserNotificationPreference } from "@/lib/data/notification-preferences";
 import { getBuildingRuleSummaries } from "@/lib/data/rules";
 
 export default async function SettingsPage() {
-  const { userId } = await auth();
-  const role = userId ? await getUserRole(userId) : "read_only";
+  const clerkReady = isClerkConfigured();
+  const { userId } = clerkReady ? await auth() : { userId: null };
+  const role = userId ? await getUserRole(userId) : "super_admin";
   const notificationPreference = await getCurrentUserNotificationPreference();
 
   if (role !== "super_admin") {

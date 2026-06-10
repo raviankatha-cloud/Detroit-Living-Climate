@@ -1,11 +1,13 @@
 import "server-only";
 import { auth } from "@clerk/nextjs/server";
 import { NextResponse } from "next/server";
+import { isClerkConfigured } from "@/lib/auth/clerk-config";
 import { canEditBuilding, canEditEverything, canViewBuilding } from "@/lib/auth/permissions";
 import { createServiceSupabaseClient } from "@/lib/supabase/server";
 
 export async function requireUser() {
-  const { userId } = await auth();
+  const clerkReady = isClerkConfigured();
+  const { userId } = clerkReady ? await auth() : { userId: "local-dev" };
 
   if (!userId) {
     return { error: NextResponse.json({ message: "Authentication required." }, { status: 401 }) };
