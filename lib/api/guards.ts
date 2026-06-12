@@ -20,7 +20,10 @@ export async function requireSupabase() {
   const supabase = createServiceSupabaseClient();
 
   if (!supabase) {
-    return { error: NextResponse.json({ message: "Supabase is not configured." }, { status: 503 }) };
+    const missing: string[] = [];
+    if (!process.env.NEXT_PUBLIC_SUPABASE_URL) missing.push("NEXT_PUBLIC_SUPABASE_URL");
+    if (!process.env.SUPABASE_SERVICE_ROLE_KEY) missing.push("SUPABASE_SERVICE_ROLE_KEY");
+    return { error: NextResponse.json({ message: `Supabase is not configured. Missing: ${missing.join(", ")}` }, { status: 503 }) };
   }
 
   return { supabase };
