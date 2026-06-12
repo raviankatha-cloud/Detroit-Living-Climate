@@ -33,7 +33,7 @@ export async function requireGlobalEditor() {
     return user;
   }
 
-  if (!(await canEditEverything(user.userId))) {
+  if (isClerkConfigured() && !(await canEditEverything(user.userId))) {
     return { error: NextResponse.json({ message: "super_admin access required." }, { status: 403 }) };
   }
 
@@ -47,7 +47,7 @@ export async function requireBuildingViewer(buildingId: string) {
     return user;
   }
 
-  if (!(await canViewBuilding(user.userId, buildingId))) {
+  if (isClerkConfigured() && !(await canViewBuilding(user.userId, buildingId))) {
     return { error: NextResponse.json({ message: "Building access required." }, { status: 403 }) };
   }
 
@@ -61,7 +61,7 @@ export async function requireBuildingEditor(buildingId: string) {
     return user;
   }
 
-  if (!(await canEditBuilding(user.userId, buildingId))) {
+  if (isClerkConfigured() && !(await canEditBuilding(user.userId, buildingId))) {
     return { error: NextResponse.json({ message: "Building edit access required." }, { status: 403 }) };
   }
 
