@@ -2,7 +2,6 @@ import { UserButton } from "@clerk/nextjs";
 import Link from "next/link";
 import type { Route } from "next";
 import { isClerkConfigured } from "@/lib/auth/clerk-config";
-import { LiveClock } from "@/components/live-clock";
 import { APP_DOMAIN, APP_NAME, APP_SUBTITLE } from "@/lib/brand";
 
 const navItems: Array<{ href: Route; label: string }> = [
@@ -33,7 +32,6 @@ export default async function InternalLayout({ children }: Readonly<{ children: 
           ))}
         </nav>
         <div className="topbar-right">
-          <LiveClock />
           {clerkReady ? <UserButton afterSignOutUrl="/sign-in" /> : null}
         </div>
       </header>
