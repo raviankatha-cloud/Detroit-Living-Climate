@@ -28,7 +28,6 @@ export default async function BuildingPage({ params }: Props) {
     notFound();
   }
 
-  const canEdit = true;
   const [alerts, auditLogs, detroitWeather] = await Promise.all([
     getBuildingAlertItems(building.id),
     getBuildingAuditLogItems(building.id),
@@ -37,14 +36,14 @@ export default async function BuildingPage({ params }: Props) {
 
   return (
     <>
-      <BuildingDetailHero building={building} canEdit={canEdit} />
+      <BuildingDetailHero building={building} canEdit={true} />
 
       <section className="building-detail-layout">
         <div className="grid">
           <ThermostatSummaryPanel building={building} />
           <DifferentialSummaryPanel building={building} />
           <FloorAveragesSection building={building} />
-          <SensorTable sensors={building.sensors} editable={canEdit} />
+          <SensorTable sensors={building.sensors} editable={true} />
           <SetupNotesSection building={building} />
           <BuildingAlertsSection alerts={alerts} />
           <BuildingAuditSection auditLogs={auditLogs} />
@@ -52,35 +51,24 @@ export default async function BuildingPage({ params }: Props) {
             <div className="section-head">
               <div>
                 <h2>Building setup editor</h2>
-                <p className="section-copy">
-                  {canEdit
-                    ? "Edit building information, manual mapping, notes, and install status while on site."
-                    : "Your role can view this building but cannot edit it."}
-                </p>
+                <p className="section-copy">Edit building information, manual mapping, notes, and install status while on site.</p>
               </div>
             </div>
-            <BuildingEditForm building={building} canEdit={canEdit} />
+            <BuildingEditForm building={building} canEdit={true} />
             <div className="divider" />
-            <ThermostatEditForm building={building} canEdit={canEdit} />
+            <ThermostatEditForm building={building} canEdit={true} />
           </section>
           <div id="sensor-setup">
-            <FloorUnitSensorEditor building={building} canEdit={canEdit} />
+            <FloorUnitSensorEditor building={building} canEdit={true} />
           </div>
         </div>
         <aside className="building-side-panel">
           <OutdoorWeatherCard weather={detroitWeather} compact />
-          {canEdit ? (
-            <BuildingControls
-              buildingId={building.id}
-              buildingName={building.name}
-              currentSetpoint={building.currentSetpoint}
-            />
-          ) : (
-            <section className="section control-panel">
-              <h3>Thermostat Controls</h3>
-              <p className="section-copy">Read-only users can view climate status but cannot change thermostat settings.</p>
-            </section>
-          )}
+          <BuildingControls
+            buildingId={building.id}
+            buildingName={building.name}
+            currentSetpoint={building.currentSetpoint}
+          />
         </aside>
       </section>
     </>
