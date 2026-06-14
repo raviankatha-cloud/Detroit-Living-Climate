@@ -1,3 +1,4 @@
+import { revalidatePath } from "next/cache";
 import { NextResponse } from "next/server";
 import { requireBuildingEditor, requireSupabase } from "@/lib/api/guards";
 import { logAuditEvent } from "@/lib/audit";
@@ -25,35 +26,46 @@ export async function PATCH(request: Request, context: Context) {
     const body = await request.json();
     const name = requireString(body.name, "Building name");
     const address = requireString(body.address, "Building address");
+    const notes = optionalString(body.notes);
+    const setupStatus = body.setupStatus ?? "ready";
+    const wifiStatus = body.wifiStatus ?? "needs_wifi";
+    const thermostatInstallStatus = body.thermostatInstallStatus ?? "needs_install";
+    const sensorInstallStatus = body.sensorInstallStatus ?? "needs_sensor_setup";
 
     const { error } = await db.supabase
       .from("buildings")
       .update({
         name,
         address,
-        notes: optionalString(body.notes),
-        setup_status: body.setupStatus ?? "ready",
-        wifi_status: body.wifiStatus ?? "needs_wifi",
-        thermostat_install_status: body.thermostatInstallStatus ?? "needs_install",
-        sensor_install_status: body.sensorInstallStatus ?? "needs_sensor_setup",
+        notes,
+        setup_status: setupStatus,
+        wifi_status: wifiStatus,
+        thermostat_install_status: thermostatInstallStatus,
+        sensor_install_status: sensorInstallStatus,
         updated_at: new Date().toISOString()
       })
       .eq("id", buildingId);
 
     if (error) {
-      throw error;
+      console.error("[buildings] PATCH failed:", error.message, error);
+      throw new Error(error.message);
     }
 
     await logAuditEvent({
       actorUserId: user.userId,
       buildingId,
-      action: "building.update",
-      metadata: { name, address }
+      action: "building.updated",
+      metadata: { name, address, notes, setupStatus, wifiStatus, thermostatInstallStatus, sensorInstallStatus }
     });
+
+    revalidatePath(`/buildings/${buildingId}`);
+    revalidatePath("/dashboard");
 
     return NextResponse.json({ message: "Building saved." });
   } catch (error) {
-    return NextResponse.json({ message: error instanceof Error ? error.message : "Unable to save building." }, { status: 400 });
+    const message = error instanceof Error ? error.message : "Unable to save building.";
+    console.error("[buildings] PATCH error:", message);
+    return NextResponse.json({ message }, { status: 400 });
   }
 }
 
@@ -81,10 +93,13 @@ export async function DELETE(_request: Request, context: Context) {
     .eq("id", buildingId);
 
   if (error) {
+    console.error("[buildings] DELETE failed:", error.message, error);
     return NextResponse.json({ message: error.message }, { status: 400 });
   }
 
-  await logAuditEvent({ actorUserId: user.userId, buildingId, action: "building.archive" });
+  await logAuditEvent({ actorUserId: user.userId, buildingId, action: "building.archived" });
+
+  revalidatePath("/dashboard");
 
   return NextResponse.json({ message: "Building archived." });
 }

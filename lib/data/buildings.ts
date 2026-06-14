@@ -1,18 +1,20 @@
 import { auth } from "@clerk/nextjs/server";
-import { demoBuildings } from "@/lib/demo-data";
+import { isClerkConfigured } from "@/lib/auth/clerk-config";
 import { canViewBuilding, getUserRole } from "@/lib/auth/permissions";
 import { createServiceSupabaseClient } from "@/lib/supabase/server";
 import type { BuildingDetail, BuildingSummary, ConnectionStatus, SensorDetail } from "@/lib/types";
 
 export async function getAccessibleBuildings(): Promise<BuildingSummary[]> {
-  const { userId } = await auth();
   const supabase = createServiceSupabaseClient();
 
-  if (!supabase || !userId) {
-    return demoBuildings;
+  if (!supabase) {
+    return [];
   }
 
-  const buildingIds = await getAccessibleBuildingIds(userId);
+  const clerkReady = isClerkConfigured();
+  const { userId } = clerkReady ? await auth() : { userId: null };
+  // null = no filter (super_admin or Clerk off → all buildings)
+  const buildingIds = userId ? await getAccessibleBuildingIds(userId) : null;
 
   if (buildingIds && buildingIds.length === 0) {
     return [];
@@ -31,8 +33,8 @@ export async function getAccessibleBuildings(): Promise<BuildingSummary[]> {
   const { data: buildings, error } = await query;
 
   if (error || !buildings) {
-    console.error("Unable to load buildings", error);
-    return demoBuildings;
+    console.error("[buildings] Unable to load buildings:", error?.message ?? error);
+    return [];
   }
 
   const ids = buildings.map((building) => building.id);
@@ -57,15 +59,17 @@ export async function getAccessibleBuildingDetails(): Promise<BuildingDetail[]> 
 }
 
 export async function getBuildingDetail(buildingId: string): Promise<BuildingDetail | null> {
-  const { userId } = await auth();
   const supabase = createServiceSupabaseClient();
 
-  if (!supabase || !userId) {
-    const buildings = await getAccessibleBuildings();
-    return demoBuildings.find((building) => building.id === buildingId && buildings.some((b) => b.id === building.id)) ?? null;
+  if (!supabase) {
+    return null;
   }
 
-  if (!(await canViewBuilding(userId, buildingId))) {
+  const clerkReady = isClerkConfigured();
+  const { userId } = clerkReady ? await auth() : { userId: null };
+
+  // Only enforce access control when Clerk is active and we have a real userId
+  if (userId && !(await canViewBuilding(userId, buildingId))) {
     return null;
   }
 
@@ -79,8 +83,8 @@ export async function getBuildingDetail(buildingId: string): Promise<BuildingDet
     .maybeSingle();
 
   if (error || !building) {
-    console.error("Unable to load building detail", error);
-    return demoBuildings.find((item) => item.id === buildingId) ?? null;
+    console.error("[buildings] Unable to load building detail:", error?.message ?? error);
+    return null;
   }
 
   const snapshot = (await getLatestSnapshots([buildingId])).get(buildingId);
