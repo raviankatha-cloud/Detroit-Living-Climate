@@ -1,20 +1,14 @@
 import type React from "react";
-import { auth } from "@clerk/nextjs/server";
 import Link from "next/link";
 import { BuildingOverview } from "@/components/building-overview";
 import { CountUp } from "@/components/count-up";
 import { OutdoorWeatherCard } from "@/components/outdoor-weather-card";
-import { isClerkConfigured } from "@/lib/auth/clerk-config";
-import { getUserRole } from "@/lib/auth/permissions";
 import { APP_DOMAIN, APP_NAME } from "@/lib/brand";
 import { needsSetup } from "@/lib/building-status";
 import { getAccessibleBuildings } from "@/lib/data/buildings";
 import { getDetroitOutdoorWeather } from "@/lib/weather";
 
 export default async function DashboardPage() {
-  const clerkReady = isClerkConfigured();
-  const { userId } = clerkReady ? await auth() : { userId: null };
-  const role = userId ? await getUserRole(userId) : "super_admin";
   const [buildings, detroitWeather] = await Promise.all([
     getAccessibleBuildings(),
     getDetroitOutdoorWeather()
@@ -49,11 +43,9 @@ export default async function DashboardPage() {
         </div>
         <div className="hero-side-stack">
           <OutdoorWeatherCard weather={detroitWeather} compact />
-          {role === "super_admin" ? (
-            <Link className="button primary" href="/setup">
-              Start setup
-            </Link>
-          ) : null}
+          <Link className="button primary" href="/setup">
+            Start setup
+          </Link>
         </div>
       </section>
 
@@ -85,7 +77,7 @@ export default async function DashboardPage() {
         </div>
       </section>
 
-      <BuildingOverview buildings={buildings} canSetup={role === "super_admin"} />
+      <BuildingOverview buildings={buildings} canSetup={true} />
     </>
   );
 }

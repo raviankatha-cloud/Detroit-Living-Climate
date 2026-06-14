@@ -1,8 +1,6 @@
 import { UserButton } from "@clerk/nextjs";
-import { auth } from "@clerk/nextjs/server";
 import Link from "next/link";
 import type { Route } from "next";
-import { getUserRole } from "@/lib/auth/permissions";
 import { isClerkConfigured } from "@/lib/auth/clerk-config";
 import { LiveClock } from "@/components/live-clock";
 import { APP_DOMAIN, APP_NAME, APP_SUBTITLE } from "@/lib/brand";
@@ -18,15 +16,6 @@ const navItems: Array<{ href: Route; label: string }> = [
 
 export default async function InternalLayout({ children }: Readonly<{ children: React.ReactNode }>) {
   const clerkReady = isClerkConfigured();
-  const { userId } = clerkReady ? await auth() : { userId: null };
-  const role = userId ? await getUserRole(userId) : "super_admin";
-  const visibleNavItems = navItems.filter((item) => {
-    if (item.href === "/setup") {
-      return role === "super_admin";
-    }
-
-    return true;
-  });
 
   return (
     <div className="app-shell">
@@ -37,7 +26,7 @@ export default async function InternalLayout({ children }: Readonly<{ children: 
           <span>{APP_DOMAIN}</span>
         </div>
         <nav className="nav-links" aria-label="Primary navigation">
-          {visibleNavItems.map((item) => (
+          {navItems.map((item) => (
             <Link key={item.href} href={item.href}>
               {item.label}
             </Link>

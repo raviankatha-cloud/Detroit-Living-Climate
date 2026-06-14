@@ -1,6 +1,4 @@
 import "server-only";
-import { auth } from "@clerk/nextjs/server";
-import { getUserRole } from "@/lib/auth/permissions";
 import { createServiceSupabaseClient } from "@/lib/supabase/server";
 
 export type EcobeeDeviceDiscovery = {
@@ -15,38 +13,20 @@ export type EcobeeDeviceDiscovery = {
 };
 
 export async function getEcobeeDeviceDiscoveries(): Promise<EcobeeDeviceDiscovery[]> {
-  const { userId } = await auth();
   const supabase = createServiceSupabaseClient();
 
-  if (!supabase || !userId) {
+  if (!supabase) {
     return [];
   }
 
-  let query = supabase
+  const { data, error } = await supabase
     .from("ecobee_device_discoveries")
     .select("id, thermostat_identifier, thermostat_id, building_id, device_type, external_id, display_name, mapped_sensor_id, last_seen_at")
     .order("last_seen_at", { ascending: false })
     .limit(80);
 
-  if ((await getUserRole(userId)) !== "super_admin") {
-    const { data: access } = await supabase
-      .from("user_building_access")
-      .select("building_id")
-      .eq("clerk_user_id", userId)
-      .not("building_id", "is", null);
-    const buildingIds = (access ?? []).map((row) => row.building_id).filter(Boolean);
-
-    if (buildingIds.length === 0) {
-      return [];
-    }
-
-    query = query.in("building_id", buildingIds);
-  }
-
-  const { data, error } = await query;
-
   if (error) {
-    console.error("Unable to load ecobee discoveries", error);
+    console.error("[ecobee] Unable to load device discoveries:", error.message);
     return [];
   }
 

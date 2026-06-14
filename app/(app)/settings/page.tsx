@@ -1,47 +1,16 @@
-import { auth } from "@clerk/nextjs/server";
 import { ShieldCheck } from "lucide-react";
 import { AccessManagementForm } from "@/components/admin-forms";
 import { EcobeeSetupPanel } from "@/components/ecobee-setup-panel";
 import { MildDayRulesPanel } from "@/components/mild-day-rules-panel";
 import { NotificationSettingsPanel } from "@/components/notification-settings-panel";
-import { isClerkConfigured } from "@/lib/auth/clerk-config";
-import { getUserRole } from "@/lib/auth/permissions";
 import { getCurrentUserNotificationPreference } from "@/lib/data/notification-preferences";
 import { getBuildingRuleSummaries } from "@/lib/data/rules";
 
 export default async function SettingsPage() {
-  const clerkReady = isClerkConfigured();
-  const { userId } = clerkReady ? await auth() : { userId: null };
-  const role = userId ? await getUserRole(userId) : "super_admin";
-  const notificationPreference = await getCurrentUserNotificationPreference();
-
-  if (role !== "super_admin") {
-    return (
-      <>
-        <section className="hero-panel compact-hero">
-          <div>
-            <span className="eyebrow">Personal settings</span>
-            <h2>Notification preferences.</h2>
-            <p>Choose which operational alerts you want to receive for buildings you can access.</p>
-          </div>
-        </section>
-        <section className="section form-section">
-          <div className="section-head">
-            <div>
-              <h2>Notifications</h2>
-              <p className="section-copy">Email, web push, warning, critical, escalation, and recovery preferences.</p>
-            </div>
-          </div>
-          <NotificationSettingsPanel
-            preference={notificationPreference}
-            vapidPublicKey={process.env.NEXT_PUBLIC_WEB_PUSH_VAPID_PUBLIC_KEY}
-          />
-        </section>
-      </>
-    );
-  }
-
-  const rules = await getBuildingRuleSummaries();
+  const [notificationPreference, rules] = await Promise.all([
+    getCurrentUserNotificationPreference(),
+    getBuildingRuleSummaries()
+  ]);
 
   return (
     <>
