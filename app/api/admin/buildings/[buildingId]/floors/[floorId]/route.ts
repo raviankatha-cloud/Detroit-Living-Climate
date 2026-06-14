@@ -46,3 +46,27 @@ export async function PATCH(request: Request, context: Context) {
     return NextResponse.json({ message: error instanceof Error ? error.message : "Unable to save floor." }, { status: 400 });
   }
 }
+
+export async function DELETE(_request: Request, context: Context) {
+  const { buildingId, floorId } = await context.params;
+  const user = await requireBuildingEditor(buildingId);
+
+  if ("error" in user) {
+    return user.error;
+  }
+
+  const db = await requireSupabase();
+
+  if ("error" in db) {
+    return db.error;
+  }
+
+  const { error } = await db.supabase.from("floors").delete().eq("id", floorId).eq("building_id", buildingId);
+
+  if (error) {
+    return NextResponse.json({ message: error.message }, { status: 400 });
+  }
+
+  await logAuditEvent({ actorUserId: user.userId, buildingId, action: "floor.delete", metadata: { floorId } });
+  return NextResponse.json({ message: "Floor deleted." });
+}

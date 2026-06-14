@@ -7,7 +7,7 @@ import { createServiceSupabaseClient } from "@/lib/supabase/server";
 
 export async function requireUser() {
   const clerkReady = isClerkConfigured();
-  const { userId } = clerkReady ? await auth() : { userId: "local-dev" };
+  const { userId } = clerkReady ? await auth() : { userId: "dev-user" };
 
   if (!userId) {
     return { error: NextResponse.json({ message: "Authentication required." }, { status: 401 }) };

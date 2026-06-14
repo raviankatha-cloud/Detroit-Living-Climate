@@ -24,6 +24,7 @@ export type FloorConfig = {
   id: string;
   name: string;
   sortOrder: number;
+  notes?: string;
 };
 
 export type UnitConfig = {

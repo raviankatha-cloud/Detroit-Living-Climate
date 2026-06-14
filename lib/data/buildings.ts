@@ -76,7 +76,7 @@ export async function getBuildingDetail(buildingId: string): Promise<BuildingDet
   const { data: building, error } = await supabase
     .from("buildings")
     .select(
-      "id, name, address, notes, setup_status, wifi_status, thermostat_install_status, sensor_install_status, floors(id, name, sort_order), units(id, unit_number, unit_label, floors(name)), thermostats(id, name, ecobee_thermostat_id, external_device_id, serial_number, reference_label, location_label, device_reference, installation_notes, setup_status, connection_status, linked_ecobee_account, last_reported_at, last_synced_at, last_sync_status), sensors(id, sensor_number, name, ecobee_sensor_id, external_device_id, serial_number, reference_label, device_reference, installation_notes, setup_status, floors(name), units(unit_number)), building_rules(id, mild_day_enabled, mild_day_outdoor_threshold_f, mild_day_setpoint_reduction_f, minimum_heat_setpoint_f), alerts(id, status)"
+      "id, name, address, notes, setup_status, wifi_status, thermostat_install_status, sensor_install_status, floors(id, name, sort_order, notes), units(id, unit_number, unit_label, floors(name)), thermostats(id, name, ecobee_thermostat_id, external_device_id, serial_number, reference_label, location_label, device_reference, installation_notes, setup_status, connection_status, linked_ecobee_account, last_reported_at, last_synced_at, last_sync_status), sensors(id, sensor_number, name, ecobee_sensor_id, external_device_id, serial_number, reference_label, device_reference, installation_notes, setup_status, floors(name), units(unit_number)), building_rules(id, mild_day_enabled, mild_day_outdoor_threshold_f, mild_day_setpoint_reduction_f, minimum_heat_setpoint_f), alerts(id, status)"
     )
     .eq("id", buildingId)
     .is("archived_at", null)
@@ -274,7 +274,8 @@ function mapBuildingRow(row: any, includeDetails = false): BuildingDetail {
       ? (row.floors ?? []).map((floor: any) => ({
           id: floor.id,
           name: floor.name,
-          sortOrder: floor.sort_order
+          sortOrder: floor.sort_order,
+          notes: floor.notes ?? undefined
         }))
       : [],
     units: includeDetails

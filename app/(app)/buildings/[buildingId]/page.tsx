@@ -10,6 +10,7 @@ import {
   ThermostatSummaryPanel
 } from "@/components/building-detail-sections";
 import { BuildingControls } from "@/components/building-controls";
+import { DeviceSetupPanel } from "@/components/device-setup-panel";
 import { OutdoorWeatherCard } from "@/components/outdoor-weather-card";
 import { SensorTable } from "@/components/sensor-table";
 import { getBuildingDetail } from "@/lib/data/buildings";
@@ -61,6 +62,7 @@ export default async function BuildingPage({ params }: Props) {
           <div id="sensor-setup">
             <FloorUnitSensorEditor building={building} canEdit={true} />
           </div>
+          <DeviceSetupPanel building={building} />
         </div>
         <aside className="building-side-panel">
           <OutdoorWeatherCard weather={detroitWeather} compact />
