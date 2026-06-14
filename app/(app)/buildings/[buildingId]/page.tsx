@@ -1,4 +1,3 @@
-import { auth } from "@clerk/nextjs/server";
 import { notFound } from "next/navigation";
 import { BuildingEditForm, FloorUnitSensorEditor, ThermostatEditForm } from "@/components/admin-forms";
 import {
@@ -13,8 +12,6 @@ import {
 import { BuildingControls } from "@/components/building-controls";
 import { OutdoorWeatherCard } from "@/components/outdoor-weather-card";
 import { SensorTable } from "@/components/sensor-table";
-import { isClerkConfigured } from "@/lib/auth/clerk-config";
-import { canEditBuilding } from "@/lib/auth/permissions";
 import { getBuildingDetail } from "@/lib/data/buildings";
 import { getBuildingAlertItems, getBuildingAuditLogItems } from "@/lib/data/operations";
 import { getDetroitOutdoorWeather } from "@/lib/weather";
@@ -25,15 +22,13 @@ type Props = {
 
 export default async function BuildingPage({ params }: Props) {
   const { buildingId } = await params;
-  const clerkReady = isClerkConfigured();
-  const { userId } = clerkReady ? await auth() : { userId: null };
   const building = await getBuildingDetail(buildingId);
 
   if (!building) {
     notFound();
   }
 
-  const canEdit = userId ? await canEditBuilding(userId, building.id) : !clerkReady;
+  const canEdit = true;
   const [alerts, auditLogs, detroitWeather] = await Promise.all([
     getBuildingAlertItems(building.id),
     getBuildingAuditLogItems(building.id),
